@@ -25,8 +25,6 @@ function FoundItems(){
 }
 
 function FoundItemsDirectiveController() {
-	var FoundItems=this;
-	FoundItems.removeItem =function(itemIndex) {MenuSearchService.removeItem(itemIndex);} 	
 }
 
 
@@ -72,6 +70,7 @@ MenuSearchService.$inject = ['$http', 'ApiBasePath'];
 
 		service.removeItem = function(itemIndex){
 			foundItems.splice(itemIndex,1);
+			console.log(foundItems.length);
 		}
 
 	}
