@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html ng-app='MenuApp'>
+  <head>
+    <meta charset="utf-8">
+    <title>No Cookie Shopping List</title>
+  </head>
+  <body>
+    <h1>Welcome to our Restaurant</h1>
+
+    
+<div ng-controller="MenuController as menu">
+<ol>
+  <li ng-repeat="category in menu.categories"><p>{{category.id}}</p></li>
+</ol>
+
+</div>
+
+    <!-- Libraries -->
+    <script src="lib/angular.min.js"></script>
+    <script src="lib/angular-ui-router.min.js"></script>
+
+<script type="text/javascript">
+  
+
+  (function(){
+  'use strict';
+
+  angular.module('MenuApp', []);
+angular.module('MenuApp')
+.service('MenuDataService', MenuDataService)
+.constant('ApiBasePath', "http://davids-restaurant.herokuapp.com");
+
+angular.module('MenuApp')
+.controller('MenuController', MenuController);
+
+MenuDataService.$inject = ['$http', 'ApiBasePath'];
+function MenuDataService($http, ApiBasePath) {
+  var service=this;
+
+ service.getMenuCategories = function () {
+    var response = $http({
+      method: "GET",
+      url: (ApiBasePath + "/categories.json")
+    });
+
+    return response;
+  };
+
+  service.getMenuForCategory = function (shortName) {
+    var response = $http({
+      method: "GET",
+      url: (ApiBasePath + "/menu_items.json"),
+      params: {
+        category: shortName
+      }
+    });
+
+    return response;
+  };
+};
+
+MenuController.$inject=['MenuDataService'];
+function MenuController(MenuDataService){
+  var menu=this;
+
+ var promise= MenuDataService.getMenuCategories();
+
+ promise.then(function(response){
+    menu.categories = response.data;
+ })
+ .catch(function(error){
+  console.log("wrong");
+ })
+};
+
+
+})();
+
+
+
+</script>
+
+
+
+
+
+
+</script>
+
+  </body>
+</html>
